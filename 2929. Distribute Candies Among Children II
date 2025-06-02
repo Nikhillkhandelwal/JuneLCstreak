@@ -1,0 +1,32 @@
+class Solution {
+    static long nCr2(long n) {
+        return (n * (n - 1)) / 2;
+    }
+
+    public static long distributeCandies(int n, int limit) {
+        long total = nCr2(n + 2); // total solutions: C(n+2, 2)
+
+        // Subtract invalid cases where one child gets more than limit
+        for (int i = 0; i < 3; i++) {
+            int over = n - (limit + 1);
+            if (over >= 0)
+                total -= nCr2(over + 2);
+        }
+
+        // Add back cases where two children are over the limit
+        for (int i = 0; i < 3; i++) {
+            for (int j = i + 1; j < 3; j++) {
+                int over = n - 2 * (limit + 1);
+                if (over >= 0)
+                    total += nCr2(over + 2);
+            }
+        }
+
+        // Subtract case where all three are over
+        int over = n - 3 * (limit + 1);
+        if (over >= 0)
+            total -= nCr2(over + 2);
+
+        return total;
+    }
+}
